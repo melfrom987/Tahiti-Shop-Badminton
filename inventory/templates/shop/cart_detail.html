@@ -1,0 +1,84 @@
+{% load static %}
+{% load custom_filters %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}">
+
+    <title>Mon Panier</title>
+    <style>
+        .nav-wrapper {
+            padding-top: 5rem; /* Ajuster selon la hauteur de votre barre de navigation */
+        }
+        .trash-icon {
+            font-size: 24px; /* Ajustez la taille de l'icône à votre convenance */
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    {% include 'navbar.html' %}
+    <div class="nav-wrapper">
+        <div class="container mx-auto px-4 py-8">
+            <h2 class="text-2xl font-semibold mb-4">Mon Panier</h2>
+            <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                {% if items %}
+                <ul>
+                    {% for item in items %}
+                    <li class="border-b py-4 flex items-center justify-between">
+                        <div class="flex items-center">
+                            {% if item.content_object.image %}
+                                <img src="{{ item.content_object.image.url }}" alt="{{ item.content_object.name }}" class="w-20 h-20 object-cover mr-4">
+                            {% endif %}
+                            <div>
+                                <h3 class="text-lg font-semibold">{{ item.content_object.name }}</h3>
+                                <p class="text-gray-600">Prix unitaire: {{ item.content_object.price|format_price }}</p>
+                            </div>
+                        </div>
+                        <div>
+                            <form method="POST" action="{% url 'update_cart_item' category=item.content_type.model item_id=item.id %}">
+                                {% csrf_token %}
+                                <label for="quantity-{{ item.id }}" class="block mb-2">Quantité :</label>
+                                <input type="number" id="quantity-{{ item.id }}" name="quantity" value="{{ item.quantity }}" min="0" max="{{ item.content_object.quantity }}" class="border p-2 w-20 mb-4">
+                                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Mettre à jour</button>
+                            </form>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">Montant : {{ item.content_object.price|get_item_price:item.quantity|format_price }}</p>
+                        </div>
+                        <form method="POST" action="{% url 'remove_cart_item' category=item.content_type.model item_id=item.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="text-red-500 hover:text-red-700">
+                                <i class="fas fa-trash-alt trash-icon"></i>
+                            </button>
+                        </form>
+                    </li>
+                    {% endfor %}
+                    <div class="flex justify-end mt-6">
+                        <form method="post" action="{% url 'add_to_order' %}">
+                            {% csrf_token %}
+                            <!-- Optionnel : incluez un champ caché pour envoyer les informations de panier si nécessaire -->
+                            {% for item in items %}
+                                <input type="hidden" name="products[]" value="{{ item.id }}">
+                                <input type="hidden" name="quantities[]" value="{{ item.quantity }}">
+                            {% endfor %}
+                            <div>
+                                <p class="text-gray-600">Montant total: {{ total_price|format_price }}</p>
+                            </div>
+                            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Passez commande</button>
+                        </form>
+                    </div>
+                </ul>
+                {% else %}
+                    <p class="p-4">Votre panier est vide.</p>
+                {% endif %}
+            </div>
+        </div>
+        </div>
+</body>
+</html>

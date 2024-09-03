@@ -1,0 +1,50 @@
+{% load static %}
+{% load custom_filters %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Volant</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Ajustement de la barre de navigation */
+        .nav-wrapper {
+            padding-top: 5rem; /* Ajuster selon la hauteur de votre barre de navigation */
+        }
+    </style>
+<body>
+    {% include 'navbar.html' %}
+    <div class="nav-wrapper">
+        <div class="page-title-bar bg-red-700 text-white py-4">
+            <div class="container mx-auto px-4 items-center justify-center">
+                <h2 class="text-2xl font-semibold">Boites de volants</h2>
+            </div>
+        </div>
+    {% if shuttle_instance %}
+        <div class="container mx-auto px-4 py-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
+            <!-- Boucle pour afficher chaque produit -->
+            {% for shuttle in shuttle_instance %}
+            <a href="{% url 'product_detail' category='shuttle' product_id=shuttle.id %}" class="product-card bg-white shadow-md rounded-lg overflow-hidden block hover:shadow-xl transition duration-300">
+                <!-- Contenu de chaque carte de produit -->
+                <div class="p-4">
+                    <!-- Image du produit -->
+                    {% if shuttle.image %}
+                        <img src="{{ shuttle.image.url }}" alt="Product Image" class="w-full h-48 object-cover">
+                    {% else %}
+                        <img src="{% static 'images/no_image.jpg' %}" alt="Product Image" class="w-full h-48 object-cover">
+                    {% endif %}
+                    <!-- Titre du produit -->
+                    <h3 class="text-lg font-semibold text-gray-800">{{ shuttle.name }}</h3>
+                    <!-- Prix du produit -->
+                    <p class="text-gray-600">{{ shuttle.price|format_price }}</p>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Aucun produit disponible pour le moment.</p>
+    {% endif %}
+</body>
+</html>

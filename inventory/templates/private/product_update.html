@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product List</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .nav-wrapper {
+            padding-top: 5rem; /* Ajuster selon la hauteur de votre barre de navigation */
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+    <!-- Navbar -->
+    {% include 'private/navbar_private.html' %}
+    
+    <!-- Form Section -->
+    <div class="nav-wrapper">
+        <div class="container mx-auto py-8">
+            <div class="max-w-md mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="p-4">
+                    <form method="get">
+                        <label for="category" class="block text-lg font-semibold mb-2">Choisir une catégorie :</label>
+                        <select id="category" name="category" onchange="this.form.submit()"
+                        class="block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
+                        <option value="">Sélectionner une catégorie</option>
+                        <option value="accessory" {% if selected_category == 'accessory' %}selected{% endif %}>Accessoire</option>
+                        <option value="shoe" {% if selected_category == 'shoe' %}selected{% endif %}>Chaussure</option>
+                        <option value="string" {% if selected_category == 'string' %}selected{% endif %}>Cordage</option>
+                        <option value="racket" {% if selected_category == 'racket' %}selected{% endif %}>Raquette</option>
+                        <option value="bag" {% if selected_category == 'bag' %}selected{% endif %}>Sac</option>
+                        <option value="clothe" {% if selected_category == 'clothe' %}selected{% endif %}>Vêtement</option>
+                        <option value="shuttle" {% if selected_category == 'shuttle' %}selected{% endif %}>Volant</option>
+                    </select>
+                </form>
+                
+                {% if products %}
+                <form method="post" class="mt-4">
+                    {% csrf_token %}
+                    <input type="hidden" name="category" value="{{ selected_category }}">
+                    <label for="product" class="block text-lg font-semibold mb-2">Choisir un produit :</label>
+                    <select id="product" name="product"
+                    class="block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
+                    {% for product in products %}
+                    <option value="{{ product.id }}">{{ product.name }}</option>
+                    {% endfor %}
+                </select>
+                <br><br>
+                <button type="submit"
+                    class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded">
+                    <i class="fas fa-save mr-2"></i> Save
+                </button>
+                </form>
+                {% endif %}
+            </div>
+            </div>
+        </div>
+    </div>
+
+    
+</body>
+
+</html>

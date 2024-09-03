@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion</title>
+    <!-- Inclure Tailwind CSS depuis CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white shadow-md rounded-lg p-8 max-w-md w-full">
+        <h2 class="text-2xl font-bold mb-6 text-center">Connexion</h2>
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label for="id_username" class="block text-sm font-medium text-gray-700">Nom d'utilisateur</label>
+                <input type="text" id="id_username" name="username" placeholder="Entrez votre nom d'utilisateur"
+                       class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent px-3 py-2">
+            </div>
+            <div class="mb-4">
+                <label for="id_password" class="block text-sm font-medium text-gray-700">Mot de passe</label>
+                <input type="password" id="id_password" name="password" placeholder="Entrez votre mot de passe"
+                       class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent px-3 py-2">
+            </div>
+            <button type="submit" class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Connexion
+            </button>
+        </form>
+        <p class="mt-4 text-center">Pas de compte ? <a href="{% url 'signup' %}" class="text-blue-500 hover:underline">Inscrivez-vous</a></p>
+    </div>
+</body>
+</html>

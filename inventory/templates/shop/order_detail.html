@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
+    <title>Détail de la commande</title>
+    <style>
+        /* Ajoutez ici vos styles CSS personnalisés si nécessaire */
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h2 class="text-2xl font-semibold mb-4">Détail de la commande {{ order.id }}</h2>
+        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+            <div class="p-4">
+                <p><strong>Numéro de commande:</strong> {{ order.id }}</p>
+                <p><strong>Passée le:</strong> {{ order.date_created }}</p>
+                <p><strong>Utilisateur:</strong> {{ order.user.username }}</p>
+            </div>
+            <div class="border-t border-gray-200">
+                <ul>
+                    {% for item in order.orderitem_set.all %}
+                        <li class="py-4 px-4 flex items-center justify-between">
+                            <div class="flex items-center">
+                                {% if item.product.image %}
+                                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="w-20 h-20 object-cover mr-4">
+                                {% endif %}
+                                <div>
+                                    <h3 class="text-lg font-semibold">{{ item.product.name }}</h3>
+                                    <p class="text-gray-600">Quantité: {{ item.quantity }}</p>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-gray-600">Prix unitaire: {{ item.product.price }}</p>
+                                <p class="text-gray-600">Montant : {{ item.quantity|mul:item.product.price }}</p>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

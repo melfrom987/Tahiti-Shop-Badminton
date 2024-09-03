@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifier - {{ product.name }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .nav-wrapper {
+            padding-top: 5rem; /* Ajuster selon la hauteur de votre barre de navigation */
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Navbar -->
+    {% include 'private/navbar_private.html' %}
+
+    <!-- Page Title -->
+    <div class="nav-wrapper">
+        <div class="bg-red-800 text-white py-4">
+            <div class="container mx-auto px-4 flex items-center justify-center">
+                <h2 class="text-2xl font-semibold">{{ product.name }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mx-auto py-8">
+        <div class="max-w-md mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
+            <div class="p-4">
+                <!-- Update Product Form -->
+                <form method="post" enctype="multipart/form-data" class="space-y-4">
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <label for="id_name" class="block text-sm font-medium text-gray-700">Nom du produit</label>
+                        <input type="text" id="id_name" name="name" placeholder="Entrez le nom du produit"
+                               value="{{ product.name }}"
+                               class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent px-3 py-2 transition duration-300 ease-in-out">
+                    </div>
+                    <div class="mb-4">
+                        <label for="id_description" class="block text-sm font-medium text-gray-700">Description</label>
+                        <textarea id="id_description" name="description" placeholder="Entrez la description du produit"
+                                  class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent px-3 py-2 transition duration-300 ease-in-out">{{ product.description }}</textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label for="id_price" class="block text-sm font-medium text-gray-700">Prix</label>
+                        <input type="text" id="id_price" name="price" placeholder="Entrez le prix du produit"
+                               value="{{ product.price }}"
+                               class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent px-3 py-2 transition duration-300 ease-in-out">
+                    </div>
+                    <div class="mb-4">
+                        <label for="id_price" class="block text-sm font-medium text-gray-700">Quantité</label>
+                        <input type="text" id="id_price" name="price" placeholder="Entrez le prix du produit"
+                               value="{{ product.quantity }}"
+                               class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent px-3 py-2 transition duration-300 ease-in-out">
+                    </div>
+                    {% if product.color %}
+                        <div class="mb-4">
+                            <label for="id_color" class="block text-sm font-medium text-gray-700">Couleur</label>
+                            <input type="text" id="id_color" name="color" placeholder="Entrez la couleur du produit"
+                                value="{{ product.color }}"
+                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent px-3 py-2 transition duration-300 ease-in-out">
+                        </div>
+                    {% endif %}
+                    <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow-md transition duration-300 ease-in-out">
+                        Enregistrer
+                    </button>
+                </form>
+
+                <!-- Delete Product Form -->
+                <form method="post" action="{% url 'delete_product' category product.id %}"
+                    class="delete-form inline" onsubmit="return confirm('Voulez-vous vraiment supprimer ce produit ?');">
+                    {% csrf_token %}
+                    <button type="submit" class="bg-transparent border-none cursor-pointer">
+                        <i class="fas fa-trash-alt text-red-500 text-xl"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

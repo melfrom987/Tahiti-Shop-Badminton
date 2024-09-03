@@ -1,0 +1,120 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Inclure Tailwind CSS depuis CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}">
+
+</head>
+
+<body class="bg-gray-100">
+
+    <!-- Barre de navigation -->
+    <nav class="bg-blue-800 text-white shadow-lg fixed w-full z-50">
+        <div class="container mx-auto px-1 ml-20">
+            <div class="flex justify-between items-center py-4">
+
+                {% if request.path != '/' %}
+                    <a href="#" class="text-white flex items-center" id="backButton">
+                        <i class="material-icons mr-2">arrow_back</i> Retour
+                    </a>
+                {% endif %}
+
+                <a href="#" class="text-yellow-200 text-6xl font-black font-serif">
+                    <i class="mr-2"></i>
+                    Tahiti Shop Badminton
+                </a>
+
+                <img src="{% static 'images/logo.jpeg' %}" alt="Logo" class="h-28" style="width: 190px;">
+
+                <ul class="flex space-x-4 text-XL">
+                    <li class="relative">
+                        <a href="{% url 'home' %}" class="text-white flex items-center">
+                            <i class="fas fa-home mr-2"></i>
+                            Accueil
+                        </a>
+                    </li>
+                    <li class="relative">
+                        <a href="#" class="text-white flex items-center dropbtn">
+                            <i class="fas fa-book-open mr-2"></i>
+                            Catalogue
+                            <i class="fas fa-caret-down ml-1"></i>
+                        </a>
+
+                        <div class="dropdown-content absolute hidden bg-blue-400 text-white shadow-lg rounded py-1 right-0">
+                            <a href="{% url 'accessory' %}" class="block px-4 py-2">Accessoires</a>
+                            <a href="{% url 'shoe' %}" class="block px-4 py-2">Chaussures</a>
+                            <a href="{% url 'string' %}" class="block px-4 py-2">Cordages</a>
+                            <a href="{% url 'racket' %}" class="block px-4 py-2">Raquettes</a>
+                            <a href="{% url 'bag' %}" class="block px-4 py-2">Sacs</a>
+                            <a href="{% url 'clothe' %}" class="block px-4 py-2">Vêtements</a>
+                            <a href="{% url 'shuttle' %}" class="block px-4 py-2">Volants</a>
+                        </div>
+                    </li>
+                    {% if user.is_staff %}
+                        <li class="home-link">
+                            <a href="{% url 'home_private' %}" class="text-white flex items-center">
+                                <i class="fas fa-lock mr-2"></i>
+                                Privé
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+                
+                <div class="flex items-center">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'profile' %}" class="text-white flex items-center">
+                            <i class="material-icons">account_circle</i>
+                            {{ user.username }}
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="text-white flex items-center">
+                            <i class="material-icons">account_circle</i>
+                            Connexion
+                        </a>
+                    {% endif %}
+                    {% if not user.is_staff %}
+                        <a href="{% url 'cart_detail' %}" class="text-white ml-4 flex items-center">
+                            <i class="fas fa-shopping-cart"></i>
+                            Panier
+                        </a>
+                    {% endif %}
+                    
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenu de la page -->
+    <div class="container mx-auto px-4 py-8">
+        <!-- Votre contenu ici -->
+    </div>
+
+    <!-- Script JavaScript pour le dropdown -->
+    <script>
+        // Exemple de script JavaScript pour activer le dropdown
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropbtn = document.querySelector('.dropbtn');
+            const dropdownContent = document.querySelector('.dropdown-content');
+
+            dropbtn.addEventListener('click', function() {
+                dropdownContent.classList.toggle('hidden');
+            });
+        });
+
+        document.getElementById('backButton').addEventListener('click', function(event) {
+            event.preventDefault();
+            history.back(); // Revenir en arrière dans l'historique du navigateur
+        });
+    </script>
+
+</body>
+
+</html>
